@@ -114,6 +114,12 @@ define('forum/register', [
 		$('#username').trigger('focus');
 	};
 
+	function suggestUsername(username) {
+		let suggestion = slugify(username);
+		suggestion += Math.floor(Math.random() * 1000);
+		return suggestion;
+	}
+
 	function validateUsername(username, callback) {
 		callback = callback || function () {};
 
@@ -135,7 +141,8 @@ define('forum/register', [
 				if (results.every(obj => obj.status === 'rejected')) {
 					showSuccess(usernameInput, username_notify, successIcon);
 				} else {
-					showError(usernameInput, username_notify, '[[error:username-taken]]');
+					const suggestion = suggestUsername(username);
+					showError(usernameInput, username_notify, `[[error:username-taken]]. Maybe try ${suggestion}`);
 				}
 
 				callback();
